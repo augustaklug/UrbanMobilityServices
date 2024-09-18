@@ -1,4 +1,4 @@
-package com.mobility.common.exception;
+package com.mobility.trafficinfo.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

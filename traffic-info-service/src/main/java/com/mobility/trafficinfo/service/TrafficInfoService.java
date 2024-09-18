@@ -1,6 +1,6 @@
 package com.mobility.trafficinfo.service;
 
-import com.mobility.common.exception.ResourceNotFoundException;
+import com.mobility.trafficinfo.exception.ResourceNotFoundException;
 import com.mobility.trafficinfo.entity.TrafficInfo;
 import com.mobility.trafficinfo.repository.TrafficInfoRepository;
 import lombok.RequiredArgsConstructor;

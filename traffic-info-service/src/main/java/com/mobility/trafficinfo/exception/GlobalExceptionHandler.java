@@ -1,4 +1,4 @@
-package com.mobility.common.exception;
+package com.mobility.trafficinfo.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

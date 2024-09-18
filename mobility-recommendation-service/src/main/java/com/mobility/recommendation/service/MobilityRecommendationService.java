@@ -1,9 +1,9 @@
 package com.mobility.recommendation.service;
 
-import com.mobility.common.exception.ResourceNotFoundException;
 import com.mobility.recommendation.client.TrafficInfoClient;
 import com.mobility.recommendation.client.TrafficInfoDTO;
 import com.mobility.recommendation.entity.MobilityRecommendation;
+import com.mobility.recommendation.exception.ResourceNotFoundException;
 import com.mobility.recommendation.repository.MobilityRecommendationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,10 +49,10 @@ public class MobilityRecommendationService {
         }
     }
 
-    private String determineRecommendedMode(Integer congestionLevel) {
-        if (congestionLevel < 3) {
+    private String determineRecommendedMode(int congestionLevel) {
+        if (congestionLevel <= 3) {
             return "Car";
-        } else if (congestionLevel < 7) {
+        } else if (congestionLevel <= 6) {
             return "Public Transport";
         } else {
             return "Bicycle or Walking";
