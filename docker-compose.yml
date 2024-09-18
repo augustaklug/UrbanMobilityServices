@@ -1,7 +1,19 @@
 version: '3.8'
 
 services:
-  postgres:
+  postgres_traffic:
+    image: postgres:14
+    container_name: traffic_postgres
+    environment:
+      POSTGRES_DB: traffic_db
+      POSTGRES_USER: traffic_user
+      POSTGRES_PASSWORD: traffic_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_traffic_data:/var/lib/postgresql/data
+
+  postgres_mobility:
     image: postgres:14
     container_name: mobility_postgres
     environment:
@@ -9,9 +21,10 @@ services:
       POSTGRES_USER: mobility_user
       POSTGRES_PASSWORD: mobility_pass
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_mobility_data:/var/lib/postgresql/data
 
 volumes:
-  postgres_data:
+  postgres_traffic_data:
+  postgres_mobility_data:

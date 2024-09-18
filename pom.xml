@@ -12,7 +12,6 @@
     <modules>
         <module>traffic-info-service</module>
         <module>mobility-recommendation-service</module>
-		<module>database-service</module>
     </modules>
 
 </project>

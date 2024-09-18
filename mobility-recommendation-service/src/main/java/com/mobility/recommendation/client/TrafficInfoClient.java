@@ -8,7 +8,6 @@ import java.util.List;
 
 @FeignClient(name = "traffic-info-service", url = "${traffic-info-service.url}")
 public interface TrafficInfoClient {
-
     @GetMapping("/api/traffic/{zipCode}")
-    List<TrafficInfoDTO> getTrafficInfo(@PathVariable("zipCode") String zipCode);
+    List<TrafficInfoDTO> getTrafficInfo(@PathVariable String zipCode);
 }
