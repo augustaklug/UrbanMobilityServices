@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14
+    container_name: mobility_postgres
+    environment:
+      POSTGRES_DB: mobility_db
+      POSTGRES_USER: mobility_user
+      POSTGRES_PASSWORD: mobility_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
