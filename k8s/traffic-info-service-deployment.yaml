@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: traffic-info-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: traffic-info-service
+  template:
+    metadata:
+      labels:
+        app: traffic-info-service
+    spec:
+      containers:
+      - name: traffic-info-service
+        image: augustaklug/traffic-info-service:latest
+        imagePullPolicy: Always
+        env:
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:postgresql://postgres:5432/mobility_db
+        - name: SPRING_DATASOURCE_USERNAME
+          value: mobility_user
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: mobility_pass
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traffic-info-service
+spec:
+  selector:
+    app: traffic-info-service
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080

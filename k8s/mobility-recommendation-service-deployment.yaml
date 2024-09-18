@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mobility-recommendation-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mobility-recommendation-service
+  template:
+    metadata:
+      labels:
+        app: mobility-recommendation-service
+    spec:
+      containers:
+      - name: mobility-recommendation-service
+        image: augustaklug/mobility-recommendation-service:latest
+        imagePullPolicy: Always
+        env:
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:postgresql://postgres:5432/mobility_db
+        - name: SPRING_DATASOURCE_USERNAME
+          value: mobility_user
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: mobility_pass
+        - name: TRAFFIC_INFO_SERVICE_URL
+          value: http://traffic-info-service:8080
+        ports:
+        - containerPort: 8082
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mobility-recommendation-service
+spec:
+  selector:
+    app: mobility-recommendation-service
+  ports:
+    - protocol: TCP
+      port: 8082
+      targetPort: 8082
