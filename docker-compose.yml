@@ -1,30 +1,58 @@
 version: '3.8'
 
 services:
-  postgres_traffic:
-    image: postgres:14
-    container_name: traffic_postgres
-    environment:
-      POSTGRES_DB: traffic_db
-      POSTGRES_USER: traffic_user
-      POSTGRES_PASSWORD: traffic_pass
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_traffic_data:/var/lib/postgresql/data
-
-  postgres_mobility:
+  postgres:
     image: postgres:14
     container_name: mobility_postgres
     environment:
-      POSTGRES_DB: mobility_db
       POSTGRES_USER: mobility_user
       POSTGRES_PASSWORD: mobility_pass
+      POSTGRES_DB: mobility_db
     ports:
-      - "5433:5432"
+      - "5432:5432"
     volumes:
-      - postgres_mobility_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - mobility-network
+
+  traffic-info-service:
+    build:
+      context: ./traffic-info-service
+      dockerfile: Dockerfile
+    container_name: traffic-info-service
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/mobility_db
+      - SPRING_DATASOURCE_USERNAME=mobility_user
+      - SPRING_DATASOURCE_PASSWORD=mobility_pass
+    depends_on:
+      - postgres
+    networks:
+      - mobility-network
+
+  mobility-recommendation-service:
+    build:
+      context: ./mobility-recommendation-service
+      dockerfile: Dockerfile
+    container_name: mobility-recommendation-service
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/mobility_db
+      - SPRING_DATASOURCE_USERNAME=mobility_user
+      - SPRING_DATASOURCE_PASSWORD=mobility_pass
+      - TRAFFIC_INFO_SERVICE_URL=http://traffic-info-service:8080
+    depends_on:
+      - postgres
+      - traffic-info-service
+    networks:
+      - mobility-network
 
 volumes:
-  postgres_traffic_data:
-  postgres_mobility_data:
+  postgres_data:
+
+networks:
+  mobility-network:
+    driver: bridge
